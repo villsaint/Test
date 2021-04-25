@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.villsaint.villsaint.config.SecurityConfig;
 import ru.villsaint.villsaint.models.User;
 import ru.villsaint.villsaint.repo.UserRepo;
 
@@ -40,6 +41,10 @@ public class UserService implements UserDetailsService {
     }
     @Transactional
     public void saveUser(User user) {
+        String password = user.getPassword();
+        if (!((password.startsWith("$2a$") || password.startsWith("$2b$")) && password.length() == 60)) {
+            user.setPassword(SecurityConfig.passwordEncoder().encode(user.getPassword()));
+        }
         userRepo.save(user);
     }
     

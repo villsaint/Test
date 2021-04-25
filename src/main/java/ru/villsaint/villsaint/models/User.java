@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "User")
-public class User  implements UserDetails{
+public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +58,7 @@ public class User  implements UserDetails{
     public User() {
     }
 
-    public User(String name,int age,String email,String username,String password, Set<Role> roles) {
+    public User(String name, int age, String email, String username, String password, Set<Role> roles) {
         this.name = name;
         this.age = age;
         this.email = email;
@@ -112,11 +112,7 @@ public class User  implements UserDetails{
     }
 
     public void setPassword(String password) {
-        if (password.startsWith("$2a$") || password.startsWith("$2b$")) {
-            this.password = password;
-        } else {
-            this.password = SecurityConfig.passwordEncoder().encode(password);
-        }
+        this.password = password;
     }
 
     public void setRoles(String[] role) {
@@ -133,7 +129,7 @@ public class User  implements UserDetails{
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map( p -> new SimpleGrantedAuthority(p.getRole())).collect(Collectors.toList());
+        return roles.stream().map(p -> new SimpleGrantedAuthority(p.getRole())).collect(Collectors.toList());
     }
 
     @Override

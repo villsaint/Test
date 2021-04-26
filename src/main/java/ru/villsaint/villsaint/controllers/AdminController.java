@@ -26,31 +26,32 @@ public class AdminController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("user", userService.findAll());
-        return "admin/index";
+//        return "admin/index";
+        return "admin/indexTest";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.findById(id));
-        return "admin/show";
+        return "admin/showTest";
     }
 
     @GetMapping("/{id}/roles")
     public String showUserRoles(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.findById(id));
-        return "admin/showRoles";
+        return "admin/showRolesTest";
     }
 
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("user") User person) {
-        return "admin/new";
+        return "admin/newTest";
     }
 
     @PostMapping("/new")
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "admin/new";
+            return "admin/newTest";
 
         userService.saveUser(user);
         return "redirect:/admin";
@@ -59,13 +60,13 @@ public class AdminController {
     @GetMapping("/update/{id}")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.findById(id));
-        return "admin/edit";
+        return "admin/editTest";
     }
 
     @PostMapping("/update/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return "admin/edit";
+            return "admin/editTest";
         userService.saveUser(user);
         return "redirect:/admin";
     }

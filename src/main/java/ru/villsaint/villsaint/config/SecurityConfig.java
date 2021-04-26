@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll() // доступность всем
                 .antMatchers("/users/**").access("hasAnyRole('ROLE_USER')") // разрешаем входить на /user пользователям с ролью User
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')") // разрешаем входить на /admin пользователям с ролью Admin
-                .and().formLogin()  // Spring сам подставит свою логин форму
+                .and()
+                .formLogin().permitAll()  // Spring сам подставит свою логин форму
                 .successHandler(successUserHandler); // подключаем наш SuccessHandler для перенеправления по ролям
     }
     @Bean

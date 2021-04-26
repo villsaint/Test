@@ -29,6 +29,11 @@ public class User implements UserDetails {
     @Column(name = "name")
     private String name;
 
+    @NotEmpty(message = "Lastname should not be empty")
+    @Size(min = 2, max = 30, message = "Lastname should be between 2 and 30 characters")
+    @Column(name = "last_name")
+    private String lastName;
+
     @Min(value = 0, message = "Age should be greater than 0")
     @Column(name = "age")
     private int age;
@@ -58,11 +63,11 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, int age, String email, String username, String password, Set<Role> roles) {
+    public User(String name, String lastName, int age, String email, String password, Set<Role> roles) {
         this.name = name;
+        this.lastName = lastName;
         this.age = age;
         this.email = email;
-        this.username = username;
         this.password = password;
         this.roles = roles;
     }
@@ -104,7 +109,8 @@ public class User implements UserDetails {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.email = username;
+        this.username = this.email;
     }
 
     public String getPassword() {
@@ -121,6 +127,14 @@ public class User implements UserDetails {
             if (role[i].equals("ROLE_ADMIN")) roles.add(new Role(1L, "ROLE_ADMIN"));
             if (role[i].equals("ROLE_USER")) roles.add(new Role(2L, "ROLE_USER"));
         }
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Set<Role> getRoles() {

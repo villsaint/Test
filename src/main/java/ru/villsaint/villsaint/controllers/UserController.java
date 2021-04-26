@@ -23,6 +23,6 @@ public class UserController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("user", userService.findById(id));
-        return "user/show";
+        return "user/showTest";
     }
 }

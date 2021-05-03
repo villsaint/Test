@@ -118,14 +118,16 @@
             <input type="text" th:field="*{password}" id="password"/>
             <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
             <br/>
-            <input type=checkbox id=adminId name=roles value="ROLE_ADMIN">
+            <input type=checkbox id=adminId name=role value="ROLE_ADMIN">
             <label for="adminId">Admin</label>
             <br/>
-            <input type=checkbox id=userId name=roles value="ROLE_USER">
+            <input type=checkbox id=userId name=role value="ROLE_USER">
             <label for="userId">User</label>
             <br/>
             <input type="submit" value="Create!"/>
+
         </form>
+
     </div>
 
 
@@ -134,9 +136,6 @@
 <br/>
 <hr/>
 
-<a href="/admin/new">Create new user</a>
-<br/>
-<a href="/logout">Logout</a>
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

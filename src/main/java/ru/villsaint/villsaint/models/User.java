@@ -11,7 +11,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,7 +52,6 @@ public class User implements UserDetails {
     @NotEmpty(message = "Password should not be empty")
     private String password;
 
-    @NotEmpty(message = "Role should not be empty")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -63,13 +61,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String name, String lastName, int age, String email, String password, Set<Role> roles) {
+    public User(long id, String name, String lastName, int age, String email, String password) {
+        this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.age = age;
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
     public long getId() {
@@ -109,8 +107,7 @@ public class User implements UserDetails {
     }
 
     public void setUsername(String username) {
-        this.email = username;
-        this.username = this.email;
+        this.username = username;
     }
 
     public String getPassword() {
@@ -121,12 +118,8 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public void setRoles(String[] role) {
-        roles = new HashSet<>();
-        for (int i = 0; i < role.length; i++) {
-            if (role[i].equals("ROLE_ADMIN")) roles.add(new Role(1L, "ROLE_ADMIN"));
-            if (role[i].equals("ROLE_USER")) roles.add(new Role(2L, "ROLE_USER"));
-        }
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     public String getLastName() {
@@ -166,12 +159,4 @@ public class User implements UserDetails {
         return false;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
 }

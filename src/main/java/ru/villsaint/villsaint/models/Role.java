@@ -1,7 +1,6 @@
 package ru.villsaint.villsaint.models;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -45,13 +44,7 @@ public class Role implements GrantedAuthority{
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Role role = (Role) obj;
-        return this.role.equals(role.getRole());
-    }
-
-    @Override
     public String toString() {
-        return role;
+        return role.replaceAll("ROLE_","");
     }
 }

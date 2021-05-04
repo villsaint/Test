@@ -202,13 +202,11 @@
  <div th:each="user: ${allUsers}">
      <!--           Edit wimdow-->
     <div class="modal fade" th:id="'edit-'+${user.getId()}" tabindex="-1">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog">
             <div class="modal-content text-center font-weight-bold">
                 <div class="modal-header">
                     <h5 class="modal-title">Edit user</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal">x</button>
                 </div>
 
                 <form th:method="PATCH" th:action="@{admin/{id}(id=${user.getId()})}">
@@ -319,9 +317,7 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title">Delete user</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>
                 </div>
 
                 <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">

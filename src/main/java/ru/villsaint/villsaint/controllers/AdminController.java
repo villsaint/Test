@@ -47,15 +47,14 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @GetMapping("/{id}")
-//    public String show(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("user", userService.findById(id));
-//        return "admin/admin";
-//    }
 
     @PostMapping(value = "/{id}")
     public String update(@ModelAttribute("user") User user,
-                         @RequestParam(value = "edit_roles", required = false) String[] role) {
+                         @RequestParam(value = "edit_roles", required = false) String[] role,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "admin/admin";
+        }
         if(role == null){
             System.out.println("Роли пустые");
         } else {
@@ -75,90 +74,3 @@ public class AdminController {
     }
 }
 
-//    @GetMapping("/edit/{id}")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//        model.addAttribute("userE", userService.findById(id));
-//        return "admin/indexTest";
-//    }
-//
-//
-//    @PostMapping("/edit/{id}")
-//    public String update(@ModelAttribute("userEdit") User user,
-//                         @RequestParam(value = "role", required = false) String[] role
-////            , BindingResult bindingResult
-//    ) {
-////        if (bindingResult.hasErrors()) {
-////            return "admin/editTest";
-////        }
-////        model.addAttribute("editUser", userService.findById(id));
-//        roleService.setRoles(user, role);
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-
-//    @GetMapping("/update/{id}")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//        model.addAttribute("user", userService.findById(id));
-//        return "admin/editTest";
-//    }
-
-//    @PatchMapping("/update/{id}")
-//    public String update(@ModelAttribute("user") User user,
-//                         @RequestParam(value = "role", required = false) String[] role,
-////                         BindingResult bindingResult
-//    ) {
-////        if (bindingResult.hasErrors()) {
-////            return "admin/editTest";
-////        }
-//        roleService.setRoles(user, role);
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-//    @GetMapping("/{id}/roles")
-//    public String showUserRoles(@PathVariable("id") int id, Model model) {
-//        model.addAttribute("user", userService.findById(id));
-//        return "admin/showRolesTest";
-//    }
-
-//    @GetMapping("/new")
-//    public String newPerson(@ModelAttribute("user") User person) {
-//        return "admin/newTest";
-//    }
-
-//    @PostMapping("/new")
-//    public String create(@ModelAttribute("user") @Valid User user,
-//                         @RequestParam(value = "role", required = false) String[] role,
-//                         BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "admin/newTest";
-//        }
-//        roleService.setRoles(user,role);
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-
-
-//    @GetMapping("/update/{id}")
-//    public String edit(Model model, @PathVariable("id") int id) {
-//        model.addAttribute("user", userService.findById(id));
-//        return "admin/editTest";
-//    }
-//
-//    @PostMapping("/update/{id}")
-//    public String update(@ModelAttribute("user") @Valid User user,
-//                         @RequestParam(value = "role", required = false) String[] role,
-//                         BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "admin/editTest";
-//        }
-//        roleService.setRoles(user, role);
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
-//
-//    @GetMapping("/{id}/delete")
-//    public String delete(@PathVariable("id") int id) {
-//        userService.deleteUser(userService.findById(id));
-//        return "redirect:/admin";
-//    }
-//}

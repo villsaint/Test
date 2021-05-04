@@ -48,7 +48,7 @@ public class AdminController {
     }
 
 
-    @PostMapping(value = "/{id}")
+    @PatchMapping(value = "/{id}")
     public String update(@ModelAttribute("user") User user,
                          @RequestParam(value = "edit_roles", required = false) String[] role,
                          BindingResult bindingResult) {
@@ -68,7 +68,8 @@ public class AdminController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") Long id) {
+        System.out.println(id);
         userService.deleteUser(userService.findById(id));
         return "redirect:/admin";
     }

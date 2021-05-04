@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String name;
 
     @NotEmpty(message = "Lastname should not be empty")
-    @Size(min = 2, max = 30, message = "Lastname should be between 2 and 30 characters")
+    @Size(min = 2, max = 30, message = "Last name should be between 2 and 30 characters")
     @Column(name = "last_name")
     private String lastName;
 
@@ -46,10 +46,12 @@ public class User implements UserDetails {
 
     @Column(name = "username")
     @NotEmpty(message = "Username should not be empty")
+    @Size(min = 2, max = 30, message = "Username should be between 2 and 30 characters")
     private String username;
 
     @Column(name = "password")
     @NotEmpty(message = "Password should not be empty")
+    @Size(min = 6, max = 60, message = "Password must be more than 6 characters")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

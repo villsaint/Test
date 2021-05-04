@@ -2,27 +2,29 @@ package ru.villsaint.villsaint.controllers;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.villsaint.villsaint.service.UserService;
+import ru.villsaint.villsaint.models.User;
+import ru.villsaint.villsaint.repo.UserRepo;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserRepo userRepo;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.findById(id));
+    @GetMapping()
+    public String show(Model model, Authentication authentication) {
+        User user = userRepo.findUserByUsername(authentication.getName());
+        model.addAttribute("user", user);
         return "user/user";
     }
 }

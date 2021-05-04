@@ -10,9 +10,6 @@ import ru.villsaint.villsaint.service.RoleService;
 import ru.villsaint.villsaint.service.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,7 +28,6 @@ public class AdminController {
     public String index(Model model) {
         model.addAttribute("allUsers", userService.findAll());
         model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles",roleService.findAll());
         return "admin/admin";
     }
 
@@ -47,20 +43,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-
     @PatchMapping(value = "/{id}")
     public String update(@ModelAttribute("user") User user,
                          @RequestParam(value = "edit_roles", required = false) String[] role,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/admin";
-        }
-        if(role == null){
-            System.out.println("Роли пустые");
-        } else {
-            for (String a : role) {
-                System.out.println(a);
-            }
         }
         roleService.setRoles(user,role);
         userService.saveUser(user);

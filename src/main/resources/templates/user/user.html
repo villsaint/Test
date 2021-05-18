@@ -27,7 +27,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" >
+        <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active text-white">
                     <h5>with roles:
@@ -50,8 +50,10 @@
         <!--    Left panel-->
         <div class="col-2">
             <div class="list-group">
-                <a href="/admin" class="list-group-item list-group-item-action" sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
-                <a href="/user" class="list-group-item list-group-item-action active" sec:authorize="hasRole('ROLE_USER')">User</a>
+                <a href="/admin" class="list-group-item list-group-item-action"
+                   sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
+                <a href="/user" class="list-group-item list-group-item-action active"
+                   sec:authorize="hasRole('ROLE_USER')">User</a>
             </div>
         </div>
         <!--    Right Panel-->
@@ -62,7 +64,7 @@
                     <div class="card-header">
                         <b>About User</b>
                     </div>
-                    <div class="card-body" >
+                    <div class="card-body">
                         <table class="table table-striped border">
                             <thead>
                             <tr>
@@ -76,13 +78,14 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <td th:text="${user.getId()}"></td>
-                                <td th:text="${user.getName()}"></td>
-                                <td th:text="${user.getLastName()}"></td>
-                                <td th:text="${user.getAge()}"></td>
-                                <td th:text="${user.getEmail()}"></td>
-                                <td th:text="${user.getUsername()}"></td>
-                                <td th:text="${user.getRoles()}"></td>
+                            <!--                                <td th:text="${user.getId()}"></td>-->
+                            <th><span sec:authentication="principal.id"></span></th>
+                            <td th:text="${user.getName()}"></td>
+                            <td th:text="${user.getLastName()}"></td>
+                            <td th:text="${user.getAge()}"></td>
+                            <td th:text="${user.getEmail()}"></td>
+                            <td th:text="${user.getUsername()}"></td>
+                            <td th:text="${user.getRoles()}"></td>
                             </tbody>
                         </table>
                     </div>

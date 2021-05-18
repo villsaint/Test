@@ -1,5 +1,6 @@
 package ru.villsaint.villsaint.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
+@JsonSerialize
 @Entity
 @Table(name = "User")
 public class User implements UserDetails {
@@ -74,6 +75,7 @@ public class User implements UserDetails {
     public long getId() {
         return id;
     }
+
 
     public void setId(long id) {
         this.id = id;
@@ -160,4 +162,11 @@ public class User implements UserDetails {
         return false;
     }
 
+    @Override
+    public String toString() {
+        return "User Id: " + id + "\n" +
+                "User Name: " + name + "\n"+
+                "User Age: " + age + "\n"+
+                "User Username: " + username;
+    }
 }

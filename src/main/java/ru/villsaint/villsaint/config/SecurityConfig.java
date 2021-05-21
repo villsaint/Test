@@ -20,7 +20,7 @@ import ru.villsaint.villsaint.service.UserService;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
-    private final SuccessUserHandler successUserHandler; // класс, в котором описана логика перенаправления пользователей по ролям
+    private final SuccessUserHandler successUserHandler;
 
     @Autowired
     public SecurityConfig(UserService userService, SuccessUserHandler successUserHandler) {
@@ -30,19 +30,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder()); // конфигурация для прохождения аутентификации
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/").permitAll() // доступность всем
+                .antMatchers("/").permitAll()
                 .antMatchers("/users/**").access("hasAnyRole('ROLE_USER')") // разрешаем входить на /user пользователям с ролью User
                 .antMatchers("/admin/**").access("hasAnyRole('ROLE_ADMIN')") // разрешаем входить на /admin пользователям с ролью Admin
-//                .antMatchers(HttpMethod.POST, "/admin/rest/newUser").access("hasAnyRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.PUT, "/admin/**").access("hasAnyRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.GET, "/admin/**").access("hasAnyRole('ROLE_ADMIN')")
-//                .antMatchers(HttpMethod.DELETE, "/admin/**").access("hasAnyRole('ROLE_ADMIN')")
                 .and()
                 .formLogin().permitAll()  // Spring сам подставит свою логин форму
                 .successHandler(successUserHandler); // подключаем наш SuccessHandler для перенеправления по ролям

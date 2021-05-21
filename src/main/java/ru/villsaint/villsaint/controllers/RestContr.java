@@ -14,38 +14,34 @@ import java.util.List;
 public class RestContr {
 
     private final UserService userService;
-    private final RoleService roleService;
 
 
-    public RestContr(UserService userService, RoleService roleService) {
+    public RestContr(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
     }
 
     @GetMapping("/allusers")
-    public List<User> allUsers(){
+    public List<User> allUsers() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") Long id){
-       return userService.findById(id);
+    public User getUser(@PathVariable("id") Long id) {
+        return userService.findById(id);
     }
 
     @PostMapping(value = "/newUser")
-    public void saveUser(@RequestBody User user){
+    public void saveUser(@RequestBody User user) {
         userService.saveUser(user);
     }
 
     @PutMapping("/edit")
-    public void updateUser(@RequestBody User user){
+    public void updateUser(@RequestBody User user) {
         userService.saveUser(user);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable("id") Long id){
+    public void deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(userService.findById(id));
     }
-
-
 }

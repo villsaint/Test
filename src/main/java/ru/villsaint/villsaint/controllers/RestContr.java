@@ -39,8 +39,6 @@ public class RestContr {
 
     @PutMapping("/edit")
     public void updateUser(@RequestBody User user){
-//        User user1 = userService.findById(id);
-//        roleService.setRoles(user,role);
         userService.saveUser(user);
     }
 

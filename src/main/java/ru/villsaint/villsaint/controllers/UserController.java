@@ -25,6 +25,6 @@ public class UserController {
     public String show(Model model, Authentication authentication) {
         User user = userRepo.findUserByUsername(authentication.getName());
         model.addAttribute("user", user);
-        return "user/userTest";
+        return "user/user";
     }
 }

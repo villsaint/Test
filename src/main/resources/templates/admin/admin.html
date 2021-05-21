@@ -9,8 +9,11 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script th:src="@{/test.js}" type="text/javascript"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script th:src="@{main.js}" type="text/javascript"></script>
 </head>
 <body>
 <!--Head-->
@@ -39,7 +42,7 @@
                     </h5>
                 </li>
             </ul>
-            <a class="nav-link text-white-50" href="http://localhost:8080/login">Logout</a>
+            <a class="nav-link text-white-50 logout" href="http://localhost:8080/logout">Logout</a>
         </div>
     </nav>
 </div>
@@ -49,31 +52,32 @@
         <!--    Left Side-->
         <div class="col-2">
             <div class="list-group">
-                <a href="/admin" class="list-group-item list-group-item-action active"
-                   sec:authorize="hasRole('ROLE_ADMIN')" id="adminPanelBtn">Admin</a>
-                <a href="/user" class="list-group-item list-group-item-action"
-                   sec:authorize="hasRole('ROLE_USER')" id="userPanelBtn">User</a>
+                <a href="/admin" class="list-group-item list-group-item-action active adminPnl"
+                   sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
+                <a href="/user" class="list-group-item list-group-item-action userPnl"
+                   sec:authorize="hasRole('ROLE_USER')">User</a>
             </div>
         </div>
-        <!--    Right Side-->
-        <div class="col-10">
+<!--        Right Side-->
+        <div class="col-10 p-5 mb-2 bg-light">
             <h1>Admin panel</h1>
             <nav>
-                <div class="nav nav-tabs" role="tablist">
-                    <a class="nav-link active" data-toggle="tab" href="#table" role="tab">User table</a>
-                    <a class="nav-link" data-toggle="tab" href="#newUser" role="tab">New User</a>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-link active"  data-toggle="tab" href="#allUsersTable" role="tab"
+                        aria-selected="true">User table</a>
+                    <a class="nav-link"  data-toggle="tab" href="#newUser" role="tab"
+                        aria-selected="false">New User</a>
                 </div>
             </nav>
             <div class="tab-content">
-                <!--                Table panel-->
-                <div class="tab-pane fade show active" id="table" role="tabpanel">
+                <div class="tab-pane fade show active" id="allUsersTable" role="tabpanel">
                     <div class="tab-content">
                         <div class="card">
                             <div class="card-header">
                                 <b>All Users</b>
                             </div>
                             <div class="card-body">
-                                <table class="table table-striped border" id="userTable">
+                                <table class="table table-striped border">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
@@ -87,32 +91,14 @@
                                         <th>Delete</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="usersTable">
-<!--                                    <tr th:each="user : ${allUsers}">-->
-<!--                                        <td th:text="${user.getId()}"></td>-->
-<!--                                        <td th:text="${user.getName()}"></td>-->
-<!--                                        <td th:text="${user.getLastName()}"></td>-->
-<!--                                        <td th:text="${user.getAge()}"></td>-->
-<!--                                        <td th:text="${user.getEmail()}"></td>-->
-<!--                                        <td th:text="${user.getUsername()}"></td>-->
-<!--                                        <td th:text="${user.getRoles()}"></td>-->
-<!--                                        <td><a type="button" class="btn btn-primary" data-toggle="modal"-->
-<!--                                               th:attr="data-target='#edit-' + ${user.getId()}" id="editUser">Edit</a>-->
-
-<!--                                        </td>-->
-<!--                                        <td><a type="button" class="btn btn-danger" data-toggle="modal"-->
-<!--                                               th:attr="data-target='#delete-' + ${user.getId()}"-->
-<!--                                               id="deleteUser">Delete</a>-->
-<!--                                        </td>-->
-<!--                                    </tr>-->
-
+                                    <tbody id="allUsersTableBody">
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--                New User Panel-->
+
                 <div class="tab-pane fade" id="newUser" role="tabpanel">
                     <div class="tab-content">
                         <div class="card">
@@ -120,340 +106,129 @@
                                 <b>Add new user</b>
                             </div>
                             <div class="card-body" align="center">
+                                    <form>
+                                        <label for="name"><b>First Name</b></label>
+                                        <input type="text" class="form-control mb-1 col-4"
+                                               id="name" aria-describedby="nameHelp">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Name should be between 2 and 30 characters</p>
 
-                                <div class="newUser">
-                                    <form th:method="POST" th:action="@{/admin}" th:object="${newUser}">
-                                        <div class="form-group">
-                                            <label for="newName"><b>Name</b></label>
-                                            <input type="text" th:field="*{name}" class="form-control mb-1 col-4"
-                                                   id="newName">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Name should be between 2 and 30
-                                                characters</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newLastName"><b>Last name</b></label>
-                                            <input type="text" th:field="*{lastName}" class="form-control mb-1 col-4"
-                                                   id="newLastName">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Last name should be between 2 and 30
-                                                characters</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newAge"><b>Age</b></label>
-                                            <input type="text" th:field="*{age}" class="form-control mb-1 col-4"
-                                                   id="newAge">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Age should be greater than 0</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newEmail"><b>Email</b></label>
-                                            <input type="email" th:field="*{email}" class="form-control mb-1 col-4"
-                                                   id="newEmail">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Acceptable type of email</p>
+                                        <label for="lastName"><b>Last Name</b></label>
+                                        <input type="text" class="form-control mb-1 col-4"
+                                               id="lastName" aria-describedby="lastNameHelp">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Last name should be between 2 and 30 characters</p>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newUsername"><b>Username</b></label>
-                                            <input type="text" th:field="*{username}" class="form-control mb-1 col-4"
-                                                   id="newUsername">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Username should be between 2 and 30
-                                                characters</p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="newPassword"><b>Password</b></label>
-                                            <input type="password" th:field="*{password}"
-                                                   class="form-control mb-1 col-4"
-                                                   id="newPassword">
-                                            <p class="help-block text-black-50 font-weight-light">
-                                                Password must be more than 6 characters</p>
+                                        <label for="age"><b>Age</b></label>
+                                        <input type="text" class="form-control mb-1 col-4"
+                                               id="age" aria-describedby="ageHelp">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Age should be greater than 0</p>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <b>Role</b>
+                                        <label for="email"><b>Email address</b></label>
+                                        <input type="email" class="form-control mb-1 col-4"
+                                               id="email" aria-describedby="emailHelp">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Email must be valid</p>
+
+                                        <label for="username"><b>Username</b></label>
+                                        <input type="text" class="form-control mb-1 col-4"
+                                               id="username" aria-describedby="emailHelp">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Username must be unique</p>
+
+
+                                        <label for="password"><b>Password</b></label>
+                                        <input type="password"
+                                               class="form-control mb-1 col-4"
+                                               id="password">
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Password must be at least 6 characters</p>
+
+                                        <label>Role</label><br>
+                                        <div class="btn-group-vertical btn-group-toggle col-4"
+                                             data-toggle="buttons">
+                                            <label class="btn btn-primary">
+                                                <input type="checkbox" value="ROLE_ADMIN" name="new_roles" id="adminRole">Admin
                                             </label>
-                                            <br>
-                                            <div class="btn-group-vertical btn-group-toggle col-4"
-                                                 data-toggle="buttons">
-                                                <label class="btn btn-primary">
-                                                    <input type="checkbox" value="ROLE_ADMIN" name="new_roles"
-                                                           id="newAdminRole">Admin
-                                                </label>
-                                                <label class="btn btn-primary">
-                                                    <input type="checkbox" value="ROLE_USER" name="new_roles"
-                                                           id="newUserRole">User
-                                                </label>
-                                            </div>
-                                            <p class="text-center text-black-50 font-weight-light">
-                                                Choose at least 1 role</p>
+                                            <label class="btn btn-primary">
+                                                <input type="checkbox" value="ROLE_USER" name="new_roles" id="userRole">User
+                                            </label>
                                         </div>
-                                        <button type="submit" class="btn btn-success col-2" id="addUserButton">Add new
-                                            user
-                                        </button>
+                                        <p class="text-center text-black-50 font-weight-light">
+                                            Choose at least 1 role</p>
+                                        <br>
+                                        <button type="submit" class="btn btn-success col-2 AddBtn">Add new user</button>
                                     </form>
-                                </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-<!--Modal windows-->
-<!--    <div th:each="user: ${allUsers}">-->
-<!--    &lt;!&ndash;           Edit wimdow&ndash;&gt;-->
-<!--    <div class="modal fade" th:id="'edit-'+${user.getId()}" tabindex="-1">-->
-<!--        <div class="modal-dialog">-->
-<!--            <div class="modal-content text-center font-weight-bold">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title">Edit user</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal">x</button>-->
-<!--                </div>-->
-
-<!--                <form th:method="PATCH" th:action="@{admin/{id}(id=${user.getId()})}">-->
-<!--                    <div align="center">-->
-<!--                        <div class="modal-body">-->
-<!--                            <label for="id" class="col-form-label">ID</label>-->
-<!--                            <input type="number" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="id"-->
-<!--                                   name="id"-->
-<!--                                   th:value="${user.getId()}">-->
-
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="name" class="col-form-label">Name</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8"-->
-<!--                                   id="name"-->
-<!--                                   name="name"-->
-<!--                                   th:value="${user.getName()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Name should be between 2 and 30 characters</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="lastName" class="col-form-label">Last name</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8"-->
-<!--                                   id="lastName"-->
-<!--                                   name="lastName"-->
-<!--                                   th:value="${user.getLastName()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Last name should be between 2 and 30 characters</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="age" class="col-form-label">Age</label>-->
-<!--                            <input type="number" class="form-control mb-6 col-8"-->
-<!--                                   id="age"-->
-<!--                                   name="age"-->
-<!--                                   th:value="${user.getAge()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Age should be greater than 0</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="email" class="col-form-label">Email</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8"-->
-<!--                                   id="email"-->
-<!--                                   name="email"-->
-<!--                                   th:value="${user.getEmail()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Acceptable type of email</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="username" class="col-form-label">Username</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8"-->
-<!--                                   id="username"-->
-<!--                                   name="username"-->
-<!--                                   th:value="${user.getUsername()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Username should be between 2 and 30-->
-<!--                                characters</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="password" class="col-form-label">Password</label>-->
-<!--                            <input type="password" class="form-control mb-6 col-8"-->
-<!--                                   id="password"-->
-<!--                                   name="password"-->
-<!--                                   th:value="${user.getPassword()}">-->
-<!--                            <p class="help-block text-black-50 font-weight-light">-->
-<!--                                Password should be between 6 and 30-->
-<!--                                characters</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label>-->
-<!--                                <b>Role</b>-->
-<!--                            </label>-->
-<!--                            <br>-->
-<!--                            <div class="btn-group-vertical btn-group-toggle col-4"-->
-<!--                                 data-toggle="buttons">-->
-<!--                                <label class="btn btn-primary">-->
-<!--                                    <input type="checkbox" value="ROLE_ADMIN" name="edit_roles">Admin-->
-<!--                                </label>-->
-<!--                                <label class="btn btn-primary">-->
-<!--                                    <input type="checkbox" value="ROLE_USER" name="edit_roles">User-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                            <p class="text-center text-black-50 font-weight-light">Choose at least 1 role</p>-->
-<!--                        </div>-->
-
-<!--                        <div class="modal-footer">-->
-<!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                            <input type="submit" class="btn btn-primary col-2" value="Edit" id="editUserCommit"/>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash;                Delete window&ndash;&gt;-->
-<!--    <div class="modal fade" th:id="${'delete-' + user.getId()}" tabindex="-1"-->
-<!--         role="dialog" aria-labelledby="editModalLabel"-->
-<!--         aria-hidden="true">-->
-<!--        <div class="modal-dialog" role="document">-->
-<!--            <div class="modal-content text-center font-weight-bold">-->
-
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title">Delete user</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">x</button>-->
-<!--                </div>-->
-
-<!--                <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">-->
-<!--                    <div align="center">-->
-<!--                        <div class="modal-body">-->
-<!--                            <label for="deleteId" class="col-form-label">Id</label>-->
-<!--                            <input type="number" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteId"-->
-<!--                                   name="id"-->
-<!--                                   th:value="${user.getId()}">-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="deleteName" class="col-form-label">Name</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteName"-->
-<!--                                   name="name"-->
-<!--                                   th:value="${user.getName()}">-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="deleteLastName" class="col-form-label">Last name</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteLastName"-->
-<!--                                   name="lastName"-->
-<!--                                   th:value="${user.getLastName()}">-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="deleteAge" class="col-form-label">Age</label>-->
-<!--                            <input type="number" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteAge"-->
-<!--                                   name="age"-->
-<!--                                   th:value="${user.getAge()}">-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="deleteEmail" class="col-form-label">Email</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteEmail"-->
-<!--                                   name="email"-->
-<!--                                   th:value="${user.getEmail()}">-->
-<!--                        </div>-->
-
-<!--                        <div class="form-group">-->
-<!--                            <label for="deleteUsername" class="col-form-label">Username</label>-->
-<!--                            <input type="text" class="form-control mb-6 col-8" disabled-->
-<!--                                   id="deleteUsername"-->
-<!--                                   name="username"-->
-<!--                                   th:value="${user.getUsername()}">-->
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                        <input type="submit" class="btn btn-danger" value="Delete"/>-->
-<!--                    </div>-->
-
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
 <div class="editUser" align="center">
-    <form th:action="@{/rest/edit/{id}}" method="PUT">
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form th:action="@{api/edit/{id}}" method="PUT">
+        <div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" >Новое сообщение</h5>
+                        <h5 class="modal-title">Edit User</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <label for="id" class="col-form-label">ID</label>
-                        <input type="number" class="form-control" id="id" name="id" value="">
+                        <input type="number" class="form-control" id="id" name="id" value="" disabled>
 
-                        <label for="editName" class="col-form-label">Name</label>
-                        <input type="text" class="form-control" id="editName" name="name" value="">
+                        <label for="nameEdit" class="col-form-label">First name</label>
+                        <input type="text" class="form-control" id="nameEdit" name="nameEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Name should be between 2 and 30 characters</p>
 
-                        <label for="editLastname" class="col-form-label">Last name</label>
-                        <input type="text" class="form-control" id="editLastname" name="lastname" value="">
+                        <label for="lastNameEdit" class="col-form-label">Last name</label>
+                        <input type="text" class="form-control" id="lastNameEdit" name="lastNameEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Last name should be between 2 and 30 characters</p>
 
-                        <label for="editAge" class="col-form-label">Age</label>
-                        <input type="text" class="form-control" id="editAge" name="age" value="">
+                        <label for="ageEdit" class="col-form-label">Age</label>
+                        <input type="text" class="form-control" id="ageEdit" name="ageEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Age should be greater than 0</p>
 
-                        <label for="editEmail" class="col-form-label">Email</label>
-                        <input type="text" class="form-control" id="editEmail" name="email" value="">
+                        <label for="emailEdit" class="col-form-label">Email</label>
+                        <input type="text" class="form-control" id="emailEdit" name="emailEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Email must be valid</p>
 
-                        <label for="editUsername" class="col-form-label">User name</label>
-                        <input type="text" class="form-control" id="editUsername" name="username" value="">
+                        <label for="usernameEdit" class="col-form-label">User name</label>
+                        <input type="text" class="form-control" id="usernameEdit" name="usernameEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Username must be unique</p>
 
-                        <label for="editPassword" class="col-form-label">Password</label>
-                        <input type="text" class="form-control" id="editPassword" name="password" value="">
+                        <label for="passwordEdit" class="col-form-label">Password</label>
+                        <input type="password" class="form-control" id="passwordEdit" name="passwordEdit" value="">
+                        <p class="text-center text-black-50 font-weight-light">
+                            Password must be at least 6 characters</p>
 
-<!--                        <label>-->
-<!--                            <b>Role</b>-->
-<!--                            <select multiple size="2" name="select_role" class="form-control"-->
-<!--                                    id="selectRoleEd">-->
-<!--                                <option name="ROLE_ADMIN" value="1">ADMIN</option>-->
-<!--                                <option name="ROLE_USER" value="2" selected="selected">USER</option>-->
-<!--                            </select>-->
-<!--                        </label>-->
-
-<!--                        <div class="form-group">&ndash;&gt;-->
-<!--                            <label>-->
-<!--                                <b>Role</b>-->
-<!--                            </label>-->
-<!--                            <br>-->
-<!--                            <div class="btn-group-vertical btn-group-toggle col-4"-->
-<!--                                 data-toggle="buttons">-->
-<!--                                <label class="btn btn-primary">-->
-<!--                                    <input type="checkbox" value="ROLE_ADMIN" name="edit_roles">Admin-->
-<!--                                </label>-->
-<!--                                <label class="btn btn-primary">-->
-<!--                                    <input type="checkbox" value="ROLE_USER" name="edit_roles">User-->
-<!--                                </label>-->
-<!--                            </div>-->
-<!--                            <p class="text-center text-black-50 font-weight-light">Choose at least 1 role</p>-->
-<!--                        </div>-->
-
-
+                        <label>Role</label><br>
+                        <div class="btn-group-vertical btn-group-toggle col-4"
+                             data-toggle="buttons">
+                            <label class="btn btn-primary">
+                                <input type="checkbox" value="ROLE_ADMIN" name="new_roles" id="adminRoleEdit">Admin
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" value="ROLE_USER" name="new_roles" id="userRoleEdit">User
+                            </label>
+                        </div>
+                        <p class="text-center text-black-50 font-weight-light">
+                            Choose at least 1 role</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary editButton" value="Edit">Edit</button>
+                        <button type="submit" class="btn btn-primary editBtnCommit" value="Edit">Edit</button>
                     </div>
                 </div>
             </div>
@@ -461,12 +236,11 @@
     </form>
 </div>
 
+<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
 
-<!-- Script's Jquery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
         crossorigin="anonymous"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
         integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
         crossorigin="anonymous"></script>

@@ -9,8 +9,6 @@ import ru.villsaint.villsaint.models.User;
 import ru.villsaint.villsaint.service.RoleService;
 import ru.villsaint.villsaint.service.UserService;
 
-import javax.validation.Valid;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -28,7 +26,7 @@ public class AdminController {
     public String index(Model model) {
 //        model.addAttribute("allUsers", userService.findAll());
 //        model.addAttribute("newUser", new User());
-        return "admin/adminTest";
+        return "admin/admin";
     }
 
 //    @PostMapping
@@ -48,7 +46,7 @@ public class AdminController {
                          @RequestParam(value = "edit_roles", required = false) String[] role,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/adminTest";
+            return "admin/admin";
         }
 //        roleService.setRoles(user,role);
 //        userService.saveUser(user);

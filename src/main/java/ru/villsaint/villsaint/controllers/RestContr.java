@@ -1,12 +1,10 @@
 package ru.villsaint.villsaint.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.villsaint.villsaint.models.User;
-import ru.villsaint.villsaint.service.RoleService;
 import ru.villsaint.villsaint.service.UserService;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -21,13 +19,14 @@ public class RestContr {
     }
 
     @GetMapping("/allusers")
-    public List<User> allUsers() {
-        return userService.findAll();
+    public ResponseEntity<List<User>> allUsers() {
+        List<User> list = userService.findAll();
+        return ResponseEntity.ok().body(list);
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable("id") Long id) {
-        return userService.findById(id);
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(userService.findById(id));
     }
 
     @PostMapping(value = "/newUser")

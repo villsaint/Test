@@ -1,5 +1,6 @@
 package ru.villsaint.villsaint.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.villsaint.villsaint.models.User;
@@ -12,7 +13,6 @@ import java.util.List;
 public class RestContr {
 
     private final UserService userService;
-
 
     public RestContr(UserService userService) {
         this.userService = userService;
@@ -30,17 +30,33 @@ public class RestContr {
     }
 
     @PostMapping(value = "/newUser")
-    public void saveUser(@RequestBody User user) {
-        userService.saveUser(user);
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
+        try {
+            userService.saveUser(user);
+            return new ResponseEntity<>("User save",HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>("User not save", HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PutMapping("/edit")
-    public void updateUser(@RequestBody User user) {
-        userService.saveUser(user);
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+        try{
+            userService.saveUser(user);
+            return new ResponseEntity<>("User update", HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("User not update", HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteUser(@PathVariable("id") Long id) {
-        userService.deleteUser(userService.findById(id));
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        try{
+            userService.deleteUser(userService.findById(id));
+            return new ResponseEntity<>("User delete", HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("User not delete", HttpStatus.NOT_FOUND);
+        }
     }
 }

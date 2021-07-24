@@ -64,12 +64,17 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     private void defaultUser(){
-        User defaultUser = new User("Ivan","Lobanov",28,"ivan@mail.ru","admin",
-                SecurityConfig.passwordEncoder().encode("123456"));
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(new Role(1L,"ROLE_ADMIN"));
-        roleSet.add(new Role(2L,"ROLE_USER"));
-        defaultUser.setRoles(roleSet);
-        saveUser(defaultUser);
+        createDefaultAdmin("admin","default",28,"admin@mail.ru","admin","admin",1L,"ROLE_ADMIN");
+        createDefaultAdmin("user","default",28,"user@mail.ru","user","user",2L,"ROLE_USER");
     }
+    private void createDefaultAdmin(String name, String lastname, int age,String email,
+                                    String username, String password,Long idRole,String role){
+        User defaultAdmin = new User(name,lastname,age,email,username,
+                SecurityConfig.passwordEncoder().encode(password));
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(new Role(idRole,role));
+        defaultAdmin.setRoles(roleSet);
+        saveUser(defaultAdmin);
+    }
+
 }

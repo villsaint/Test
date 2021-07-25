@@ -64,10 +64,10 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     private void defaultUser(){
-        createDefaultAdmin("admin","default",28,"admin@mail.ru","admin","admin",1L,"ROLE_ADMIN");
-        createDefaultAdmin("user","default",28,"user@mail.ru","user","user",2L,"ROLE_USER");
+        createDefaultUser("admin","default",28,"admin@mail.ru","admin","admin",1L,"ROLE_ADMIN");
+        createDefaultUser("user","default",28,"user@mail.ru","user","user",2L,"ROLE_USER");
     }
-    private void createDefaultAdmin(String name, String lastname, int age,String email,
+    private void createDefaultUser(String name, String lastname, int age,String email,
                                     String username, String password,Long idRole,String role){
         User defaultAdmin = new User(name,lastname,age,email,username,
                 SecurityConfig.passwordEncoder().encode(password));

@@ -25,7 +25,6 @@ public class UserService implements UserDetailsService {
 
         this.userRepo = userRepo;
         this.roleService = roleService;
-//        firstUser();
     }
 
     public User findById(long id) {
